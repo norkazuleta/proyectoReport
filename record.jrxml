@@ -1,21 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-03-02T08:02:37 -->
+<!-- 2016-03-13T14:31:43 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="record" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f136aa64-b713-4cc8-9aab-a1453b7bcdde">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="db_proyecto"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="db_proyecto"/>
+	<parameter name="cedu" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["8355972"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="URI_LOGO_LEFT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["logo-left.png"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="URI_LOGO_RIGHT" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["logo-right.png"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="URI_WORKSPACE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[select * from unidad_curricular where pnf_id=1]]>
+		<![CDATA[SELECT pnf_desc,
+       tray_desc,
+       peri_desc,
+       uc_desc,
+       nomb,
+       apell,
+       cedu,
+       aldea_nomb
+
+FROM estudiante estu,
+     aldea ald,
+     pnf pf
+INNER JOIN pnf_tray_peri ptp ON(pf.pnf_id=ptp.pnf_id)
+INNER JOIN trayecto tray ON(tray.tray_id=ptp.tray_id)
+INNER JOIN periodo peri ON(peri.peri_id=ptp.peri_id)
+INNER JOIN pnf_tray_peri_uc ptpuc ON(ptpuc.ptp_id=ptp.id)
+INNER JOIN unidad_curricular uc ON(uc.uc_id=ptpuc.uc_id)
+WHERE
+	pf.pnf_id=1	 AND estu.cedu=$P{cedu}
+ORDER BY pf.pnf_desc,
+         tray.tray_desc,
+         peri.peri_desc ASC
+
+
+	 
+]]>
 	</queryString>
-	<field name="uc_id" class="java.lang.Integer">
+	<field name="pnf_desc" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="pnf_id" class="java.lang.Integer">
+	<field name="tray_desc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="peri_desc" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="uc_desc" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="nomb" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apell" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cedu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="aldea_nomb" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="TRAY">
+		<groupExpression><![CDATA[$F{tray_desc}]]></groupExpression>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -41,16 +97,16 @@ REGISTRO DE CALIFICACIONES]]></text>
 			</staticText>
 			<image>
 				<reportElement x="0" y="2" width="80" height="81" uuid="91fbb04a-df04-4501-8233-5d9ef049afcc"/>
-				<imageExpression><![CDATA["/media/datos/sistemas/www/proyecto/proyectoReport/logo-left.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{URI_LOGO_LEFT}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="490" y="2" width="80" height="81" uuid="202e012a-8e00-4cf9-a5bd-d8cd9ef9690e"/>
-				<imageExpression><![CDATA["/media/datos/sistemas/www/proyecto/proyectoReport/logo-right.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{URI_LOGO_RIGHT}]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="196" splitType="Stretch">
+		<band height="201" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="50" height="20" uuid="16df3058-558c-428b-a07a-ab590d2300e7">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -115,7 +171,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{aldea_nomb}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="60" y="40" width="320" height="20" uuid="0b8a7978-c028-4714-bdfc-8ff51deeb710"/>
@@ -127,7 +183,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["ZULIA"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="60" y="60" width="320" height="20" uuid="9e46eee6-6c07-4d37-85f9-e3b1baccca2e"/>
@@ -139,7 +195,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["FINES DE SEMANA"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="210" y="80" width="360" height="20" uuid="66d2541d-c32e-4938-abcd-032969f29e9e"/>
@@ -151,7 +207,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["LAUDITH ZULETA MILIAN"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="380" y="0" width="76" height="40" uuid="9f0931e8-911b-426a-9d0e-d951dbdb7c3b"/>
@@ -176,7 +232,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["01"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="380" y="40" width="190" height="20" uuid="a6517716-213f-48e7-8be0-28812840ec9d"/>
@@ -188,7 +244,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="380" y="60" width="190" height="20" uuid="5a85a40e-6173-4034-8f60-6f5dd9fe25ec"/>
@@ -200,7 +256,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="20" width="70" height="20" uuid="21b8fb3b-1e97-4925-a95f-a71ddc4121c0"/>
@@ -225,7 +281,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["GUAJIRA"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="240" y="107" width="330" height="20" uuid="9d70d72e-e2cf-40e4-9485-d439fed0e133"/>
@@ -238,7 +294,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{pnf_desc}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="107" width="240" height="20" uuid="7339725c-4757-4ae8-801a-7e8d272f523a"/>
@@ -277,7 +333,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cedu}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="127" width="240" height="20" uuid="74d3815e-a4f0-4670-9e2b-7418d6c28318"/>
@@ -303,7 +359,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nomb} + " "+$F{apell}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="147" width="240" height="20" uuid="774d62c2-4293-4e67-97c8-0f2538833483"/>
@@ -374,7 +430,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["N°"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="40" y="0" width="250" height="20" uuid="9207a4d9-2036-48b3-bc51-e340f6dbef7f"/>
@@ -400,7 +456,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["SEMESTRE"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tray_desc} +"  -  "+ $F{peri_desc}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="430" y="0" width="140" height="20" uuid="ce77c4e2-484e-4e73-b0e0-c1c42af4dedb"/>
@@ -413,7 +469,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CALIFICACIÓN(NUMERO)"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -432,7 +488,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[C.I.:00000000]]></text>
+				<text><![CDATA[C.I.:14370034]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="7" width="570" height="56" uuid="ac1e513f-d78c-4315-8209-dc0259977f53"/>
@@ -473,7 +529,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[NOMBRE COORDINADORA]]></text>
+				<text><![CDATA[SOC. LAUDITH ZULETA MILIAN]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="134" y="186" width="314" height="18" uuid="2fe4ec85-7b2d-427c-9bf2-86530a423fc6">
@@ -488,7 +544,7 @@ REGISTRO DE CALIFICACIONES]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[0000-0000000]]></text>
+				<text><![CDATA[0416-5652742]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="134" y="114" width="314" height="18" uuid="b9acdaf5-8842-4bd3-9def-74ba1edefbb4">
