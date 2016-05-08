@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-05-05T12:29:16 -->
+<!-- 2016-05-08T08:11:58 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="record" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f136aa64-b713-4cc8-9aab-a1453b7bcdde">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="db_proyecto"/>
@@ -56,7 +56,7 @@ INNER JOIN trayecto tray ON(secc.tray_id=tray.tray_id)
 INNER JOIN periodo peri ON(secc.peri_id=peri.peri_id)
 INNER JOIN unidad_curricular uc ON(secc.uc_id=uc.uc_id)
 INNER JOIN periodo_academico pa ON(secc.pa_id=pa.pa_id)
-INNER JOIN nota nt ON(secc.secc_id=nt.nota_id)
+INNER JOIN nota nt ON(secc.secc_id=nt.secc_id AND nt.cedu=$P{cedu})
 WHERE
 pers.cedu=$P{cedu} 
 ORDER BY
