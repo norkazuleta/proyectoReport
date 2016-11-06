@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-05-08T08:11:58 -->
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-10-31T06:41:42 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="record" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f136aa64-b713-4cc8-9aab-a1453b7bcdde">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="db_proyecto"/>
-	<parameter name="cedu" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["8355972"]]></defaultValueExpression>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="conn.xml"/>
+	<parameter name="pnf_id" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="URI_LOGO_LEFT" class="java.lang.String" isForPrompting="false">
+	<parameter name="persona_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[3]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_URI_LOGO_LEFT" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["logo-left.png"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="URI_LOGO_RIGHT" class="java.lang.String" isForPrompting="false">
+	<parameter name="RPT_URI_LOGO_RIGHT" class="java.lang.String" isForPrompting="false">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA["logo-right.png"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="URI_WORKSPACE" class="java.lang.String" isForPrompting="false">
+	<parameter name="RPT_URI_WORKSPACE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_PAGE_TITLE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["PAGE TITLE"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_DIRECTORY_SEPARATOR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_PAGE_HEADER" class="java.lang.String">
+		<defaultValueExpression><![CDATA["REPORTE DE COMERCIOS REGISTRADOS"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_PAGE_UBICATION" class="java.lang.String">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT
-pers.cedu, CONCAT(pers.nomb, ' ', pers.apell) AS nomb_apell, CONCAT(pers.naci, '-', pers.cedu) AS fix_cedu,
+		<![CDATA[SELECT pers.cedu, CONCAT(pers.nomb, ' ', pers.apell) AS nomb_apell, CONCAT(pers.naci, '-', pers.cedu) AS fix_cedu,
 edo.edo_nomb,
 muni.muni_nomb,
 parroq.parroq_nomb,
@@ -36,31 +51,31 @@ uc.uc_desc,
 CONCAT(pa.pa_anio, '-', pa.pa_codi) AS _pa,
 nt.nota, nt.asist
 FROM estudiante estu
-INNER JOIN persona pers ON(estu.persona_cedu=pers.cedu)
-INNER JOIN seccion_estu secc_estu ON(estu.persona_cedu=secc_estu.cedu)
-INNER JOIN seccion secc ON(secc_estu.secc_id=secc.secc_id)
+INNER JOIN persona pers ON(estu.persona_id=pers.id)
+INNER JOIN pnf ON(estu.pnf_id=pnf.pnf_id)
+INNER JOIN seccion secc ON(pnf.pnf_id=secc.pnf_id)
+
+/*INNER JOIN  seccion_estu sestu ON(secc.secc_id=sestu.secc_id AND sestu.persona_id=3)*/
+
 INNER JOIN aldea ald ON(secc.aldea_codi=ald.aldea_codi)
 LEFT JOIN (
 	SELECT
 	ald_coord.aldea_codi,
 	CONCAT(pers.nomb, ' ', pers.apell) AS nomb_apell, CONCAT(pers.naci, '-', pers.cedu) AS fix_cedu, pers.cedu, pers.telf, pers.profesion_fix
 	FROM aldea_coord ald_coord
-	INNER JOIN persona pers ON(pers.cedu=ald_coord.persona_cedu)
+	INNER JOIN persona pers ON(pers.id=ald_coord.persona_id)
 ) AS coord ON(ald.aldea_codi=coord.aldea_codi)
 INNER JOIN parroquia parroq ON(ald.parroq_codi=parroq.parroq_codi)
 INNER JOIN municipio muni ON(parroq.muni_codi=muni.muni_codi)
 INNER JOIN estado edo ON(muni.edo_codi=edo.edo_codi)
 INNER JOIN turno turn ON(secc.turn_id=turn.turn_id)
-INNER JOIN pnf ON(secc.pnf_id=pnf.pnf_id)
 INNER JOIN trayecto tray ON(secc.tray_id=tray.tray_id)
 INNER JOIN periodo peri ON(secc.peri_id=peri.peri_id)
 INNER JOIN unidad_curricular uc ON(secc.uc_id=uc.uc_id)
 INNER JOIN periodo_academico pa ON(secc.pa_id=pa.pa_id)
-INNER JOIN nota nt ON(secc.secc_id=nt.secc_id AND nt.cedu=$P{cedu})
-WHERE
-pers.cedu=$P{cedu} 
-ORDER BY
-    pnf.pnf_desc, tray.tray_desc, peri.peri_desc ASC]]>
+INNER JOIN nota nt ON(secc.secc_id=nt.secc_id AND nt.persona_id=$P{persona_id} )
+WHERE estu.persona_id=$P{persona_id} 
+    AND estu.pnf_id=$P{pnf_id} ]]>
 	</queryString>
 	<field name="cedu" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -133,11 +148,11 @@ REGISTRO DE CALIFICACIONES]]></text>
 			</staticText>
 			<image>
 				<reportElement x="0" y="2" width="80" height="81" uuid="91fbb04a-df04-4501-8233-5d9ef049afcc"/>
-				<imageExpression><![CDATA[$P{URI_LOGO_LEFT}]]></imageExpression>
+				<imageExpression><![CDATA[$P{RPT_URI_WORKSPACE}+$P{RPT_DIRECTORY_SEPARATOR}+$P{RPT_URI_LOGO_LEFT}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="490" y="2" width="80" height="81" uuid="202e012a-8e00-4cf9-a5bd-d8cd9ef9690e"/>
-				<imageExpression><![CDATA[$P{URI_LOGO_RIGHT}]]></imageExpression>
+				<imageExpression><![CDATA[$P{RPT_URI_WORKSPACE}+$P{RPT_DIRECTORY_SEPARATOR}+$P{RPT_URI_LOGO_RIGHT}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="0" y="117" width="50" height="20" uuid="16df3058-558c-428b-a07a-ab590d2300e7">

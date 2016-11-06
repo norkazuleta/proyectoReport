@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-03-13T14:31:43 -->
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-10-30T15:45:33 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="record" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f136aa64-b713-4cc8-9aab-a1453b7bcdde">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="db_proyecto"/>
-	<parameter name="cedu" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["8355972"]]></defaultValueExpression>
+	<parameter name="pnf_id" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="URI_LOGO_LEFT" class="java.lang.String" isForPrompting="false">
+	<parameter name="RPT_URI_LOGO_LEFT" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA["logo-left.png"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="URI_LOGO_RIGHT" class="java.lang.String" isForPrompting="false">
+	<parameter name="RPT_URI_LOGO_RIGHT" class="java.lang.String" isForPrompting="false">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA["logo-right.png"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="URI_WORKSPACE" class="java.lang.String" isForPrompting="false">
+	<parameter name="RPT_URI_WORKSPACE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_PAGE_TITLE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["PAGE TITLE"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_DIRECTORY_SEPARATOR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_PAGE_HEADER" class="java.lang.String">
+		<defaultValueExpression><![CDATA["REPORTE DE COMERCIOS REGISTRADOS"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RPT_PAGE_UBICATION" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="persona_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[3]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT pnf_desc,
@@ -36,14 +53,10 @@ INNER JOIN periodo peri ON(peri.peri_id=ptp.peri_id)
 INNER JOIN pnf_tray_peri_uc ptpuc ON(ptpuc.ptp_id=ptp.id)
 INNER JOIN unidad_curricular uc ON(uc.uc_id=ptpuc.uc_id)
 WHERE
-	pf.pnf_id=1	 AND estu.cedu=$P{cedu}
+	pf.pnf_id=$P{pnf_id} 	 AND estu.persona_id= $P{persona_id} 
 ORDER BY pf.pnf_desc,
          tray.tray_desc,
-         peri.peri_desc ASC
-
-
-	 
-]]>
+         peri.peri_desc ASC]]>
 	</queryString>
 	<field name="pnf_desc" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -97,11 +110,11 @@ REGISTRO DE CALIFICACIONES]]></text>
 			</staticText>
 			<image>
 				<reportElement x="0" y="2" width="80" height="81" uuid="91fbb04a-df04-4501-8233-5d9ef049afcc"/>
-				<imageExpression><![CDATA[$P{URI_LOGO_LEFT}]]></imageExpression>
+				<imageExpression><![CDATA[$P{RPT_URI_WORKSPACE}+$P{RPT_DIRECTORY_SEPARATOR}+$P{RPT_URI_LOGO_LEFT}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="490" y="2" width="80" height="81" uuid="202e012a-8e00-4cf9-a5bd-d8cd9ef9690e"/>
-				<imageExpression><![CDATA[$P{URI_LOGO_RIGHT}]]></imageExpression>
+				<imageExpression><![CDATA[$P{RPT_URI_WORKSPACE}+$P{RPT_DIRECTORY_SEPARATOR}+$P{RPT_URI_LOGO_RIGHT}]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
